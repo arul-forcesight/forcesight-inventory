@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demand Forecasting · Forcesight</title>
+    <meta
+      name="description"
+      content="Static demo of the Forcesight inventory demand-forecasting module: campaigns, a three-step wizard, scenario comparison and a forecast computed in the browser from dummy sales history."
+    />
+
+    <!-- Relative paths throughout, so the folder drops straight into a
+         GitHub Pages site at any sub-path. -->
+    <link rel="icon" href="./assets/forcesight-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/app.css" />
+    <link rel="stylesheet" href="./css/demand-forecasting.css" />
+    <link rel="stylesheet" href="./css/helix.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <noscript>
+      <p style="padding: 40px; font-family: sans-serif">
+        This demo computes its forecast in the browser, so JavaScript has to be enabled.
+      </p>
+    </noscript>
+
+    <!--
+      Plain scripts, loaded in dependency order. No bundler and no ES modules:
+      the folder has to work opened straight off disk as well as served from
+      GitHub Pages, and file:// refuses module imports.
+    -->
+    <script src="./js/core.js"></script>
+    <script src="./js/data/catalog.js"></script>
+    <script src="./js/engine.js"></script>
+    <script src="./js/store.js"></script>
+    <script src="./js/ui.js"></script>
+    <script src="./js/shell.js"></script>
+    <script src="./js/helix.js"></script>
+    <script src="./js/adjustments.js"></script>
+    <script src="./js/modals.js"></script>
+    <script src="./js/view-campaigns.js"></script>
+    <script src="./js/view-wizard.js"></script>
+    <script src="./js/view-forecast.js"></script>
+    <script src="./js/app.js"></script>
+  </body>
+</html>
