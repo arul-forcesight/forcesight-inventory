@@ -227,9 +227,7 @@
     clear(root);
 
     const helixOpen = FS.helix && FS.helix.isOpen();
-    root.className = [helixOpen ? "helix-open" : "", collapsed ? "" : "nav-expanded"]
-      .filter(Boolean)
-      .join(" ");
+    root.className = helixOpen ? "helix-open" : "";
 
     root.appendChild(renderSidebar());
 

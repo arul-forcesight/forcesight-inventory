@@ -246,7 +246,34 @@ input, select, textarea { font-family: inherit; }
   flex: none;
 }
 
-.content { padding: 22px 24px 48px; display: flex; flex-direction: column; gap: 16px; }
+.content {
+  padding: 22px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /*
+   * The work column is a container, so cards inside it respond to the width
+   * they actually have rather than the width of the window. Opening the nav
+   * or the Helix panel narrows this column without touching the viewport,
+   * and a media query would never notice.
+   */
+  container-type: inline-size;
+  container-name: work;
+}
+
+/* Title and actions stop competing for one line and stack instead. The
+   compact variant is a toolbar, not a title block — it wraps in place. */
+@container work (max-width: 820px) {
+  .card-head:not(.compact) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .card-head:not(.compact) .row-gap { justify-content: flex-start; }
+  .card-head:not(.compact) .card-title { font-size: 19px; }
+  .card-head.compact { flex-wrap: wrap; }
+  .card-head.compact .grow { flex-basis: 100%; height: 0; }
+}
 
 /* --------------------------------------------------------------- surfaces */
 .card {
@@ -787,6 +814,26 @@ input, select, textarea { font-family: inherit; }
   font-size: 13px;
   color: var(--body);
   line-height: 1.5;
+}
+
+/*
+ * Under this width there is not enough room for a labelled nav, the work
+ * area and a docked assistant all at once. The nav falls back to its icon
+ * rail whatever the stored preference says — that buys 156px, which is what
+ * keeps the assistant docked rather than floating over the page.
+ */
+@media (max-width: 1100px) {
+  .sidebar { width: var(--sidebar-w-collapsed); }
+  .sidebar .menu-label,
+  .sidebar .menu-caret,
+  .sidebar .submenu,
+  .sidebar .sidebar-caption,
+  .sidebar .logo-word-img { display: none; }
+  .sidebar .logo .logo-img { display: block; }
+  .sidebar-logo { justify-content: center; padding: 16px 0 12px; }
+  .sidebar .menu-item { justify-content: center; padding: 11px 0; }
+  .sidebar-toggle-row { justify-content: center; }
+  .main { margin-left: var(--sidebar-w-collapsed); }
 }
 
 @media (max-width: 1240px) {
