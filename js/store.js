@@ -113,8 +113,12 @@
   }
 
   /** Four campaigns so the list is not empty on a first visit. */
+  // Who a purchase order is raised against.
+  const VENDORS = ["Acme Corp", "Global Supplies Ltd", "Premium Distributors", "Eastern Imports"];
+  const WAREHOUSES = ["Warehouse 1", "Warehouse 2", "Warehouse 3"];
+
   function seed() {
-    state = { seq: 0, campaigns: [] };
+    state = { seq: 0, campaigns: [], plans: [] };
 
     const mk = (over) => {
       const c = blankCampaign(over);
@@ -167,7 +171,38 @@
       runStatus: "",
     });
 
+    seedPlans();
     save();
+  }
+
+  /** Two plans drawn from the seeded campaigns. */
+  function seedPlans() {
+    const today = U.today();
+    const approved = state.campaigns.filter((c) => c.status === "approved");
+    state.plans = [
+      {
+        id: nextId(),
+        name: "PO-2026-001",
+        createdAt: U.addDays(today, -22).getTime(),
+        vendor: "Acme Corp",
+        status: "approved",
+        campaignIds: approved.slice(0, 1).map((c) => c.id),
+        doi: 30,
+        moqRules: [{ id: "m1", moq: 200 }],
+        leadRules: [{ id: "l1", days: 32 }],
+      },
+      {
+        id: nextId(),
+        name: "PO-2026-002",
+        createdAt: U.addDays(today, -9).getTime(),
+        vendor: "Global Supplies Ltd",
+        status: "draft",
+        campaignIds: approved.slice(1, 2).map((c) => c.id),
+        doi: 21,
+        moqRules: [],
+        leadRules: [],
+      },
+    ];
   }
 
   function load() {
@@ -177,6 +212,11 @@
         const parsed = JSON.parse(raw);
         if (parsed && Array.isArray(parsed.campaigns)) {
           state = parsed;
+          if (!Array.isArray(state.plans)) {
+            state.plans = [];
+            seedPlans();
+            save();
+          }
           return;
         }
       }
@@ -315,6 +355,51 @@
     return result;
   }
 
+  // ------------------------------------------------------------ restock plans
+  function listPlans() {
+    return ensure().plans.slice().sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  function getPlan(id) {
+    return ensure().plans.find((p) => p.id === Number(id)) || null;
+  }
+
+  function blankPlan() {
+    const n = ensure().plans.length + 3;
+    return {
+      id: nextId(),
+      name: `PO-2026-${String(n).padStart(3, "0")}`,
+      createdAt: Date.now(),
+      vendor: VENDORS[0],
+      status: "draft",
+      campaignIds: [],
+      doi: 30,
+      moqRules: [],
+      leadRules: [],
+    };
+  }
+
+  function createPlan(fields) {
+    const p = Object.assign(blankPlan(), fields || {});
+    ensure().plans.push(p);
+    save();
+    return p;
+  }
+
+  function updatePlan(id, fields) {
+    const p = getPlan(id);
+    if (!p) return null;
+    Object.assign(p, fields);
+    save();
+    return p;
+  }
+
+  function deletePlan(id) {
+    const st = ensure();
+    st.plans = st.plans.filter((p) => p.id !== Number(id));
+    save();
+  }
+
   function resetAll() {
     try {
       localStorage.removeItem(KEY);
@@ -330,5 +415,7 @@
     resolveLookback, emptyAdjustments, defaultConstraints, eventRows,
     listCampaigns, getCampaign, scenariosOf, createCampaign, updateCampaign,
     deleteCampaign, duplicateScenario, runCampaign, blankCampaign, resetAll, save,
+    VENDORS, WAREHOUSES,
+    listPlans, getPlan, createPlan, updatePlan, deletePlan, blankPlan,
   };
 })(window.FS);

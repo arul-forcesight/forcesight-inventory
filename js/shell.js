@@ -40,13 +40,16 @@
       ],
     },
     {
-      key: "plan", label: "Plan Inventory", icon: "box", color: "#795548",
-      children: [{ label: "Ledger" }, { label: "Restock Plan" }],
+      key: "plan", label: "Plan Inventory", icon: "box", color: "#795548", open: true,
+      children: [
+        { label: "Ledger" },
+        { label: "Restock Plan", route: "#/restock" },
+      ],
     },
     {
       key: "inventory", label: "Inventory", icon: "box", color: "#795548", open: true,
       children: [
-        { label: "Demand Forecasting", route: "#/demand-forecasting", active: true },
+        { label: "Demand Forecasting", route: "#/demand-forecasting" },
         { label: "Inventory Price Tracking" },
       ],
     },
@@ -64,6 +67,13 @@
       children: [{ label: "Product Settings" }, { label: "User Settings" }, { label: "Logout" }],
     },
   ];
+
+  /** Does this menu entry point at the route currently on screen? */
+  function isActiveChild(child) {
+    if (!child.route) return false;
+    const path = (window.location.hash.replace(/^#/, "").split("?")[0]) || "/demand-forecasting";
+    return child.route.replace(/^#/, "").split("?")[0] === path;
+  }
 
   let collapsed = localStorage.getItem(COLLAPSE_KEY) === "1";
   /*
@@ -134,7 +144,7 @@
     MENU.forEach((item) => {
       const hasKids = !!(item.children && item.children.length);
       const isOpen = openGroups.has(item.key);
-      const activeChild = hasKids && item.children.some((c) => c.active);
+      const activeChild = hasKids && item.children.some(isActiveChild);
 
       const row = el(`button.menu-item${activeChild ? " parent-active" : ""}`, {
         title: item.label,
@@ -171,7 +181,7 @@
         const sub = el("div.submenu");
         item.children.forEach((child) => {
           sub.appendChild(
-            el(`button.submenu-item${child.active ? " active" : ""}`, {
+            el(`button.submenu-item${isActiveChild(child) ? " active" : ""}`, {
               title: child.label,
               onclick: () => {
                 if (child.route) {
@@ -192,12 +202,12 @@
   }
 
   // ----------------------------------------------------------------- header
-  function renderHeader(title, subtitle) {
+  function renderHeader(title, subtitle, crumb) {
     const helixOpen = FS.helix && FS.helix.isOpen();
 
     return el("header.page-header", {}, [
       el("div.head-left", {}, [
-        el("span.crumb", { text: "Inventory" }),
+        el("span.crumb", { text: crumb || "Inventory" }),
         el("span.crumb-sep", { text: ">" }),
         el("h1.page-title", { text: title }),
         subtitle ? el("span.page-sub", { text: subtitle }) : null,
@@ -232,7 +242,7 @@
     root.appendChild(renderSidebar());
 
     const main = el("main.main", { class: collapsed ? "collapsed" : "" });
-    main.appendChild(renderHeader(currentView.title, currentView.subtitle));
+    main.appendChild(renderHeader(currentView.title, currentView.subtitle, currentView.crumb));
     const content = el("div.content", { id: "content" });
     main.appendChild(content);
     root.appendChild(main);

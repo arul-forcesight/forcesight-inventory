@@ -606,3 +606,111 @@
   .evt-col:first-child { border-right: 0; padding-right: 0; }
   .fp-grid { grid-template-columns: 1fr; }
 }
+
+/* ===========================================================================
+   Restock — the plan list, the wizard's own bits, and the plan detail.
+   Everything else reuses the shared card, table and stepper styles above.
+   =========================================================================== */
+
+.restock-plans-table { min-width: 940px; }
+.cell-plain { font-size: 13px; color: var(--ink); }
+.value-green { font-size: 13px; font-weight: 600; color: var(--green); }
+
+/* Forecast chips — the campaigns a plan covers, and the MOQ/lead rules. */
+.fc-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.fc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 36px;
+  padding: 0 8px 0 14px;
+  border-radius: 999px;
+  background: var(--line-soft);
+  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.fc-x {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--red);
+}
+.fc-x:hover { background: var(--red-soft); }
+
+/* A softer primary, for the "pick something" buttons on the board. */
+.btn-soft {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--blue-soft);
+  font-weight: 600;
+}
+.btn-soft:hover { background: #d9e9fb; border-color: var(--blue); color: var(--blue); }
+
+/* The forecast picker's list. */
+.fc-list { display: flex; flex-direction: column; gap: 8px; }
+.fc-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.fc-row:hover { border-color: #cfe3fb; }
+.fc-row.on { border-color: var(--blue); background: var(--blue-tint); }
+.fc-row input { accent-color: var(--blue); width: 16px; height: 16px; flex: none; }
+.fc-meta { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.fc-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.fc-sub { font-size: 12px; color: var(--muted); }
+
+/* The confirmation strip above a freshly created plan. */
+.created-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 2px 0 2px;
+}
+.created-text { font-size: 15px; font-weight: 600; color: var(--ink); }
+
+.plan-detail { padding: 20px 22px; display: flex; flex-direction: column; gap: 16px; }
+.plan-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.plan-head-left { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.plan-name-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.plan-label { font-size: 13.5px; font-weight: 600; color: var(--body); }
+.plan-name { margin: 0; font-size: 22px; font-weight: 600; color: var(--ink); }
+.plan-forecast { font-size: 13.5px; color: var(--ink); }
+
+/* The one line of advice the board puts above the tiles. */
+.ai-insight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  background: var(--blue-tint);
+  color: var(--body);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.restock-table { min-width: 760px; }
+.restock-table th { background: #fff; }
+.restock-table tfoot td {
+  background: #f9fafb;
+  border-top: 1px solid var(--line);
+  font-weight: 600;
+  color: var(--ink);
+}

@@ -25,9 +25,30 @@ This is not a click-through mockup. The whole process runs:
 | **Constraints** | Capital budget, target DIO and lead time, with an impact preview that re-runs the engine on every slider move. |
 | **How this was computed** | The pipeline's own log — what each stage did and to how many rows. |
 | **Helix AI** | The right-hand assistant. Opens from the header, collapses the nav to icons, and answers from the campaign on screen. |
+| **Restock** | Turns approved forecasts into a purchase order — see below. |
 
 Everything is persisted to `localStorage`, so a reload lands where you left off.
 **Reset demo data** on the campaigns screen puts the seeded set back.
+
+## Restock
+
+The second module, under **Plan Inventory → Restock Plan**. A plan points at one
+or more demand-forecasting campaigns and reads the rows those runs already
+produced — nothing is forecast twice. It only decides what to buy, from whom,
+and what to move between warehouses:
+
+```
+Required  = forecast qty + DOI cover − stock on hand
+To buy    = Required, rounded up to the MOQ
+Transfers = a warehouse holding more than it needs ships to one that is short
+```
+
+- **Plan list** — PO name, vendor, status, the forecasts it covers, order value.
+- **Wizard** — name and vendor, pick the forecasts (several are summed into one
+  order, deduped by SKU), then set target DOI and any MOQ / lead-time overrides.
+- **Plan detail** — five tiles, the lead-time insight, and three tables:
+  Manufacturer/Supplier view, per-warehouse Restock view, and the Transfer
+  table. Each is searchable and exports to CSV, and the whole plan exports too.
 
 ## Helix AI
 
@@ -107,6 +128,8 @@ js/modals.js            target picker, reference mapping, weights, PO, scope
 js/view-campaigns.js    the list
 js/view-wizard.js       the three-step wizard
 js/view-forecast.js     the result screen
+js/restock.js           the restock arithmetic (required, MOQ, transfers)
+js/view-restock.js      the restock list, wizard and plan detail
 js/app.js               hash router
 ```
 

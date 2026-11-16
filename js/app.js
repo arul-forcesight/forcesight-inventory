@@ -22,10 +22,26 @@
   }
 
   let last = "";
+  // The current query, so a view can read it without re-parsing the hash.
+  let current = {};
 
   function route() {
     const { path, params } = parseHash();
     const key = window.location.hash;
+    current = params;
+
+    if (path === "/restock") {
+      if (last !== key) FS.views.restock.open(params);
+      last = key;
+      const plan = params.plan ? FS.store.getPlan(Number(params.plan)) : null;
+      FS.shell.setView({
+        title: "Restock",
+        crumb: "Inventory",
+        subtitle: plan ? plan.name : params.view === "wizard" ? "New plan" : "Plans",
+        render: FS.views.restock.render,
+      });
+      return;
+    }
 
     if (path !== "/demand-forecasting") {
       window.location.hash = "#/demand-forecasting";
@@ -39,6 +55,7 @@
       last = key;
       FS.shell.setView({
         title: "Demand Forecasting",
+        crumb: "Inventory",
         subtitle: "New campaign",
         render: FS.views.wizard.render,
       });
@@ -61,6 +78,7 @@
       const campaign = FS.store.getCampaign(Number(params.campaign));
       FS.shell.setView({
         title: "Demand Forecasting",
+        crumb: "Inventory",
         subtitle: campaign ? campaign.name : "",
         render: FS.views.forecast.render,
       });
@@ -70,10 +88,14 @@
     last = key;
     FS.shell.setView({
       title: "Demand Forecasting",
+      crumb: "Inventory",
       subtitle: "Campaigns",
       render: FS.views.campaigns.render,
     });
   }
+
+  // Views read the query through here rather than parsing the hash again.
+  FS.app = { params: () => current };
 
   window.addEventListener("hashchange", route);
   window.addEventListener("DOMContentLoaded", () => {
