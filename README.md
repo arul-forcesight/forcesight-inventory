@@ -26,9 +26,13 @@ This is not a click-through mockup. The whole process runs:
 | **How this was computed** | The pipeline's own log — what each stage did and to how many rows. |
 | **Helix AI** | The right-hand assistant. Opens from the header, collapses the nav to icons, and answers from the campaign on screen. |
 | **Restock** | Turns approved forecasts into a purchase order — see below. |
+| **B2B PO View** | Every purchase-order line raised against the catalogue, filtered by channel. |
+| **Slow Moving Inventory** | Stock whose days-on-hand exceed the ideal, priced at an adjustable cost of capital. |
+| **Inventory View** | Stock on hand, in transit and in production per SKU × warehouse, with a combo roll-up. |
 
-Everything is persisted to `localStorage`, so a reload lands where you left off.
-**Reset demo data** on the campaigns screen puts the seeded set back.
+Demo data lives in memory for the session: **a reload puts the seeded set back.**
+It used to persist, which meant a demo picked up whatever the last person left
+behind. Only UI preferences (nav collapsed, Helix open) are stored.
 
 ## Restock
 
@@ -130,6 +134,7 @@ js/view-wizard.js       the three-step wizard
 js/view-forecast.js     the result screen
 js/restock.js           the restock arithmetic (required, MOQ, transfers)
 js/view-restock.js      the restock list, wizard and plan detail
+js/view-inventory.js    B2B PO View, Slow Moving Inventory, Inventory View
 js/app.js               hash router
 ```
 

@@ -9,7 +9,6 @@
   "use strict";
 
   const U = FS.util;
-  const KEY = "fs_demand_forecasting_v1";
 
   const LOOKBACK_OPTIONS = [
     { value: "last90", label: "Last 90 Days" },
@@ -205,34 +204,19 @@
     ];
   }
 
+  /*
+   * Demo data is per-session: every load starts from the seeded set.
+   *
+   * It used to persist, which meant a demo picked up whatever the last person
+   * left behind — half-built campaigns, renamed plans — and needed a "Reset
+   * demo data" button to dig out of. A reload is the reset now.
+   */
   function load() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed && Array.isArray(parsed.campaigns)) {
-          state = parsed;
-          if (!Array.isArray(state.plans)) {
-            state.plans = [];
-            seedPlans();
-            save();
-          }
-          return;
-        }
-      }
-    } catch (e) {
-      // Corrupt or unavailable storage falls through to a fresh seed.
-    }
     seed();
   }
 
-  function save() {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(state));
-    } catch (e) {
-      // Private-mode storage can refuse writes; the session still works.
-    }
-  }
+  /* State lives in memory for the session; nothing is written to storage. */
+  function save() {}
 
   function ensure() {
     if (!state) load();
@@ -400,12 +384,8 @@
     save();
   }
 
+  /** Back to the seeded set without a reload. */
   function resetAll() {
-    try {
-      localStorage.removeItem(KEY);
-    } catch (e) {
-      /* nothing to clear */
-    }
     state = null;
     ensure();
   }

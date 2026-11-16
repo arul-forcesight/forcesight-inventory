@@ -30,6 +30,28 @@
     const key = window.location.hash;
     current = params;
 
+    // Leaving the restock wizard for anywhere else drops its unfinished draft.
+    if (!(path === "/restock" && params.view === "wizard")) {
+      FS.views.restock.cleanup();
+    }
+
+    // The three read-only inventory screens: same shell, no sub-views.
+    const SIMPLE = {
+      "/b2b-po": { title: "B2B PO View", view: "b2bPo" },
+      "/slow-moving": { title: "Slow Moving Inventory", view: "slowMoving" },
+      "/inventory-view": { title: "Inventory View", view: "inventoryView" },
+    };
+    if (SIMPLE[path]) {
+      last = key;
+      FS.shell.setView({
+        title: SIMPLE[path].title,
+        crumb: "Inventory",
+        subtitle: "",
+        render: FS.views[SIMPLE[path].view].render,
+      });
+      return;
+    }
+
     if (path === "/restock") {
       if (last !== key) FS.views.restock.open(params);
       last = key;

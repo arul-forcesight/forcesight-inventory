@@ -714,3 +714,97 @@
   font-weight: 600;
   color: var(--ink);
 }
+
+/* ===========================================================================
+   The read-only inventory screens: B2B PO View, Slow Moving, Inventory View.
+   =========================================================================== */
+
+/* The filter strip that sits above the card on all three. */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 2px;
+}
+.fb-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.fb-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 6px 0 14px;
+  border-radius: 8px;
+  background: var(--line-soft);
+}
+.fb-pill-label { font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.fb-pill-select {
+  height: 30px;
+  border: 0;
+  background-color: transparent;
+  font-weight: 500;
+  padding-left: 0;
+}
+.fb-pill-input {
+  width: 58px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  text-align: center;
+  font-size: 13px;
+  outline: 0;
+}
+.fb-pill-input:focus { border-color: var(--blue); }
+.fb-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.fb-filter:hover { background: #d9e9fb; }
+
+.inv-title { display: flex; align-items: center; gap: 7px; }
+.inv-info { display: inline-flex; color: var(--muted); cursor: help; }
+
+/* Export sits in the board's dark navy rather than the module blue. */
+.btn-dark {
+  height: 38px;
+  gap: 8px;
+  background: #0a2540;
+  border-color: #0a2540;
+  color: #fff;
+  font-weight: 600;
+}
+.btn-dark:hover { background: #0f3356; border-color: #0f3356; color: #fff; }
+
+.combo-toggle { display: inline-flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--ink); }
+
+/* These screens are nothing but their table, so it gets the window. The
+   selector matches .table-wrap.scroll's specificity and comes later. */
+.table-wrap.scroll.inv-scroll { max-height: calc(100vh - 290px); }
+
+.inv-table { min-width: 1100px; }
+.inv-table th { background: #fff; white-space: nowrap; }
+.inv-table td { white-space: nowrap; }
+.inv-table tfoot td {
+  position: sticky;
+  bottom: 0;
+  background: #f4f6f8;
+  border-top: 1px solid var(--line);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* The four figures above the Inventory View table. */
+.stat-tile { padding: 18px 20px; gap: 10px; }
+.stat-label { font-size: 14px; font-weight: 500; color: var(--body); }
+.stat-value { font-size: 24px; font-weight: 600; color: var(--ink); }

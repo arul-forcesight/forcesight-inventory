@@ -40,16 +40,17 @@
       ],
     },
     {
-      key: "plan", label: "Plan Inventory", icon: "box", color: "#795548", open: true,
-      children: [
-        { label: "Ledger" },
-        { label: "Restock Plan", route: "#/restock" },
-      ],
+      key: "plan", label: "Plan Inventory", icon: "box", color: "#795548",
+      children: [{ label: "Ledger" }],
     },
     {
       key: "inventory", label: "Inventory", icon: "box", color: "#795548", open: true,
       children: [
         { label: "Demand Forecasting", route: "#/demand-forecasting" },
+        { label: "Restock Plan", route: "#/restock" },
+        { label: "B2B PO View", route: "#/b2b-po" },
+        { label: "Slow Moving Inventory", route: "#/slow-moving" },
+        { label: "Inventory View", route: "#/inventory-view" },
         { label: "Inventory Price Tracking" },
       ],
     },

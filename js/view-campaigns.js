@@ -40,27 +40,9 @@
           el("h2.card-title", { text: "Demand Forecasting Campaigns" }),
           el("p.card-sub", { text: "Create and manage your demand forecasting scenarios" }),
         ]),
-        el("div.row-gap", {}, [
-          el("button.btn", {
-            title: "Clear the saved demo data and start again",
-            onclick: () =>
-              confirm({
-                title: "Reset the demo?",
-                message: "Every campaign and scenario you created goes back to the seeded set.",
-                okText: "Reset",
-                danger: true,
-                onOk: () => {
-                  FS.store.resetAll();
-                  page = 1;
-                  FS.shell.refresh();
-                  toast("Demo data reset.", "success");
-                },
-              }),
-          }, [icon("refresh", 15), el("span", { text: "Reset demo data" })]),
-          el("button.btn.btn-primary", {
-            onclick: () => { window.location.hash = "#/demand-forecasting?view=wizard"; },
-          }, [icon("plus", 16), el("span", { text: "Create New Campaign" })]),
-        ]),
+        el("button.btn.btn-primary", {
+          onclick: () => { window.location.hash = "#/demand-forecasting?view=wizard"; },
+        }, [icon("plus", 16), el("span", { text: "Create New Campaign" })]),
       ])
     );
 

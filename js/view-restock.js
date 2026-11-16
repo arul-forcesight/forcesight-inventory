@@ -819,15 +819,21 @@
       if (!draft) beginWizard();
       return;
     }
-    /*
-     * Leaving the wizard by any route, not just Cancel. The plan row is
-     * created up front so each step can save onto it, which means navigating
-     * away would otherwise strand an empty one in the list.
-     */
+    cleanup();
+  }
+
+  /*
+   * Drop an abandoned draft.
+   *
+   * The plan row is created up front so each step can save onto it, so
+   * leaving the wizard by any route — Cancel, the plans table, or straight
+   * out to another module — has to clear it or the list keeps an empty one.
+   */
+  function cleanup() {
     if (draft && !(draft.campaignIds || []).length) S.deletePlan(draft.id);
     draft = null;
   }
 
   FS.views = FS.views || {};
-  FS.views.restock = { render, open };
+  FS.views.restock = { render, open, cleanup };
 })(window.FS);
